@@ -72,3 +72,5 @@
 /backend/yarn-error.log
 /backend/yarn-debug.log*
 /backend/.yarn-integrity
+
+/database
