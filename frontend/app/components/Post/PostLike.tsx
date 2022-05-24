@@ -10,14 +10,14 @@ import { Auth } from "../../modules/Auth";
 // hooks
 import { useLikesSWR } from "../../hooks/useLikesSWR";
 
-type MicropostLikeProps = {
+type PostLikeProps = {
   id: number;
 };
 
-export const MicropostLike: React.FC<MicropostLikeProps> = ({ id }) => {
-  const Likes_Create_Url = process.env.NEXT_PUBLIC_BASE_URL + "likes?micropost_id=" + id;
-  const Likes_Delete_Url = process.env.NEXT_PUBLIC_BASE_URL + "likes?micropost_id=" + id;
-  const Likes_Count_Url = process.env.NEXT_PUBLIC_BASE_URL + "microposts/" + id;
+export const PostLike: React.FC<PostLikeProps> = ({ id }) => {
+  const Likes_Create_Url = process.env.NEXT_PUBLIC_BASE_URL + "likes?post_id=" + id;
+  const Likes_Delete_Url = process.env.NEXT_PUBLIC_BASE_URL + "likes?post_id=" + id;
+  const Likes_Count_Url = process.env.NEXT_PUBLIC_BASE_URL + "posts/" + id;
 
   const { mutate } = useSWRConfig();
 
@@ -30,9 +30,9 @@ export const MicropostLike: React.FC<MicropostLikeProps> = ({ id }) => {
   const { data, error } = useSWRImmutable(Likes_Count_Url);
 
   useEffect(() => {
-    if (!likes_data || !likes_data?.liked_microposts) return;
-    if (likes_data.liked_microposts) {
-      const index = likes_data.liked_microposts;
+    if (!likes_data || !likes_data?.liked_posts) return;
+    if (likes_data.liked_posts) {
+      const index = likes_data.liked_posts;
       if (index.includes(id)) {
         setIslike(true);
       }
@@ -74,7 +74,7 @@ export const MicropostLike: React.FC<MicropostLikeProps> = ({ id }) => {
     <>
       <IconButton onClick={() => handleClick()} size="small">
         {isLike ? <FavoriteIcon color={"secondary"} /> : <FavoriteBorderIcon />}
-        <span style={{ marginLeft: "10px" }}>{data?.micropost?.liked}</span>
+        <span style={{ marginLeft: "10px" }}>{data?.post?.liked}</span>
       </IconButton>
     </>
   );

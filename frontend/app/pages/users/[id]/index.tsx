@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 //components
 import { Layout } from "../../../components/Layout";
-import { UserMicropostList } from "../../../components/Users/UserMicropostList";
+import { UserPostList } from "../../../components/Users/UserPostList";
 import { UserDeleteButton } from "../../../components/Users/UserDeleteButton";
 import { UserFollowButton } from "../../../components/Users/UserFollowButton";
 import { UserUnFollowButton } from "../../../components/Users/UserUnFollowButton";
@@ -16,7 +16,7 @@ import { useRelationshipsSWR } from "../../../hooks/useRelationshipsSWR";
 //Module
 import { Auth } from "../../../modules/Auth";
 //types
-import { MicropostType } from "../../../types/Micropost";
+import { PostType } from "../../../types/Post";
 //Bootstrap
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -32,7 +32,7 @@ type ProfileDataType = {
   id: number | null;
   gravator_url: string;
   name: string;
-  microposts: MicropostType[];
+  posts: PostType[];
   following_count: number;
   followers_count: number;
 };
@@ -53,7 +53,7 @@ const Profile: React.FC<ProfileProps> = ({ id }) => {
     id: null,
     gravator_url: "",
     name: "",
-    microposts: [],
+    posts: [],
     following_count: 0,
     followers_count: 0,
   });
@@ -82,7 +82,7 @@ const Profile: React.FC<ProfileProps> = ({ id }) => {
         .then((data) => {
           console.log({ data });
           setProfileData(data);
-          const totalPage = Math.ceil(data.microposts.length / maxPerPage);
+          const totalPage = Math.ceil(data.posts.length / maxPerPage);
           setPageState(Object.assign({ ...pageState }, { totalPage }));
           let target_date = new Date(data.created_at);
           // console.log({ target_date })
@@ -110,7 +110,7 @@ const Profile: React.FC<ProfileProps> = ({ id }) => {
         .then((data) => {
           console.log({ data });
           setProfileData(data);
-          const totalPage = Math.ceil(data.microposts.length / maxPerPage);
+          const totalPage = Math.ceil(data.posts.length / maxPerPage);
           setPageState(Object.assign({ ...pageState }, { totalPage }));
           set_Reload_Profile(false);
         });
@@ -198,13 +198,13 @@ const Profile: React.FC<ProfileProps> = ({ id }) => {
               )}
             </Col>
             <Col md={7}>
-              {profileData.microposts.length != 0 && (
+              {profileData.posts.length != 0 && (
                 <>
                   <Pagination_Bar pageState={pageState} setPageState={setPageState} />
-                  {/* login Userとprofile userのIDが等しかったら、micropostはswrから取得させる*/}
+                  {/* login Userとprofile userのIDが等しかったら、postはswrから取得させる*/}
                   {user_data && user_data.user && id_checker(Number(id), user_data.user.id) && (
-                    <UserMicropostList
-                      microposts={user_data.user.microposts}
+                    <UserPostList
+                      posts={user_data.user.posts}
                       gravator_url={user_data.user.gravator_url}
                       name={user_data.user.name}
                       currentPage={currentPage}
@@ -212,10 +212,10 @@ const Profile: React.FC<ProfileProps> = ({ id }) => {
                       count={true}
                     />
                   )}
-                  {/* こっちが普通のstateからMicropostを表示 */}
+                  {/* こっちが普通のstateからPostを表示 */}
                   {!id_checker(Number(id), user_data?.user?.id) && (
-                    <UserMicropostList
-                      microposts={profileData.microposts}
+                    <UserPostList
+                      posts={profileData.posts}
                       gravator_url={profileData.gravator_url}
                       name={profileData.name}
                       currentPage={currentPage}
@@ -223,10 +223,10 @@ const Profile: React.FC<ProfileProps> = ({ id }) => {
                       count={true}
                     />
                   )}
-                  {/* loginしてなくてもstateからMicropostを表示 */}
+                  {/* loginしてなくてもstateからPostを表示 */}
                   {!Auth.isLoggedIn() && (
-                    <UserMicropostList
-                      microposts={profileData.microposts}
+                    <UserPostList
+                      posts={profileData.posts}
                       gravator_url={profileData.gravator_url}
                       name={profileData.name}
                       currentPage={currentPage}

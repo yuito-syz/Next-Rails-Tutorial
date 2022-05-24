@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-    has_many :microposts, dependent: :destroy
+    has_many :posts, dependent: :destroy
 
     # followingを管轄するactive_relationship
     has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
@@ -13,7 +13,7 @@ class User < ApplicationRecord
     # has_many_throughの中間テーブルを定義する
     has_many :following, through: :active_relationships, source: :followed
     has_many :followers, through: :passive_relationships, source: :follower
-    has_many :liked_microposts, through: :likes, source: :micropost
+    has_many :liked_posts, through: :likes, source: :post
 
     attr_accessor :activation_token, :reset_token
     before_save { self.email.downcase! }
@@ -71,9 +71,9 @@ class User < ApplicationRecord
     def feed(offset, limit)
         following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
         if limit > 0
-        Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id).with_attached_image.includes(:user).limit(limit).offset(offset)
+        Post.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id).with_attached_image.includes(:user).limit(limit).offset(offset)
         else
-        Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id).with_attached_image.includes(:user).offset(offset)
+        Post.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id).with_attached_image.includes(:user).offset(offset)
         end
     end
 
