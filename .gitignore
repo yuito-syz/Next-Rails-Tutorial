@@ -64,4 +64,5 @@
 /backend/config/master.key
 
 /backend/vendor/bundle
+/backend/.env
 /tmp

@@ -8,12 +8,13 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: root
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - ./tmp/db:/var/lib/mysql
       
   backend:
     container_name: backend
+    stdin_open: true
     tty: true
     depends_on:
       - db
@@ -21,10 +22,19 @@ services:
       context: ./backend/
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 8080:8080
     volumes:
       - ./backend:/app
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      DB_PORT: 3306
+      DB_HOST: db
+      RAILS_MAX_THREADS: 5
+      RAILS_ENV: development
+      CORS_ORIGINS: 'localhost:3000,127.0.0.1:3000'
+      REDIS_URL: redis://redis:6379
 
   frontend:
     container_name: frontend
@@ -35,4 +45,4 @@ services:
       - ./frontend/app:/usr/src/app
     command: 'yarn dev'
     ports:
-      - "8000:3000"
+      - "3000:3000"
