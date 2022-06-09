@@ -36,7 +36,7 @@ gem "bootsnap", require: false
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem "rack-cors"
 
-#　Json Web Tokenでログイン用トークン作成する
+# Json Web Tokenでログイン用トークン作成する
 gem 'jwt'
 
 # フェイクデータを作成する

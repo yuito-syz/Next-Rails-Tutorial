@@ -72,7 +72,7 @@ export const PasswordResetForm: React.FC<PasswordResetProps> = ({ Closemodal }) 
         aria-invalid={errors.email ? "true" : "false"}
         {...register('email', { required: true })}
       />
-      <button type="submit" className={styles.form_submit}>Password Reset</button>
+      <Button type="submit" className={styles.form_submit}>Password Reset</Button>
     </form>
   )
 }
